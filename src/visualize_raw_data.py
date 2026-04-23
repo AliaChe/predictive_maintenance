@@ -26,7 +26,7 @@ sensors =  [f"sensor_{i}" for i in range(19, not_nan_sensors_nb)]
 check_unit = 4
 unit = df[df["unit"] == check_unit]
 
-# Plot sensors evolution over time for specific unit(s)
+# Plot sensors evolution over time for chosen unit
 plt.figure(figsize=(10,6))
 for s in sensors:
     plt.plot(unit["cycle"], unit[s], label=s)
@@ -53,3 +53,13 @@ df = df.merge(rul, on="unit")
 df["RUL"] = df["max_cycle"] - df["cycle"]
 
 print("df with RUL info: \n", df.head())
+
+# update unit dataframe with RUL info
+unit = df[df["unit"] == check_unit]
+
+# plot RUL over time for chosen unit
+plt.plot(unit["cycle"], unit["RUL"])
+plt.title("RUL over time - Unit 1")
+plt.xlabel("Cycle")
+plt.ylabel("RUL")
+plt.show()
