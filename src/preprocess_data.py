@@ -1,5 +1,7 @@
 import pandas as pd
 import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
 
 df = pd.read_csv("./data/raw/train_FD001.txt", sep=" ", header=None)
 
@@ -12,7 +14,7 @@ columns = (
 
 df.columns = columns
 
-# drop null sensors
+# drop nan sensors (TODO: try less agressive filtering later)
 df.dropna(axis=1, inplace=True)
 
 # compute remaining useful life (RUL) for each unit
@@ -48,7 +50,41 @@ def create_sequences(df, sequence_length, features):
 
     return np.array(X), np.array(y)
 
-X, y = create_sequences(df, sequence_length, features)
+# split data by unit  into train, test and validation 
+units = df["unit"].unique()
 
-print("AI input (seq_nb, seq_length, features_nb):", X.shape)
-print("AI target (seq_nb,):",y.shape)
+train_units, temp_units = train_test_split(
+    units, test_size=0.3, random_state=42
+)
+
+val_units, test_units = train_test_split(
+    temp_units, test_size=0.5, random_state=42
+)
+
+train_df = df[df["unit"].isin(train_units)].copy()
+val_df   = df[df["unit"].isin(val_units)].copy()
+test_df  = df[df["unit"].isin(test_units)].copy()
+
+scaler = StandardScaler()
+
+# fit ONLY on training data
+scaler.fit(train_df[features])
+
+# transform all splits
+train_df[features] = scaler.transform(train_df[features])
+val_df[features]   = scaler.transform(val_df[features])
+test_df[features]  = scaler.transform(test_df[features])
+
+# check
+print("Train units:", len(train_units))
+print("Val units:", len(val_units))
+print("Test units:", len(test_units))
+
+print("Train shape:", train_df.shape)
+print("Val shape:", val_df.shape)
+print("Test shape:", test_df.shape)
+
+# create sequences
+X_train, y_train = create_sequences(train_df, sequence_length, features)
+X_val, y_val     = create_sequences(val_df, sequence_length, features)
+X_test, y_test   = create_sequences(test_df, sequence_length, features)
