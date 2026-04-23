@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-df = pd.read_csv("./NASA_data/train_FD001.txt", sep=" ", header=None)
+df = pd.read_csv("./data/raw/train_FD001.txt", sep=" ", header=None)
 
 columns = (
     ["unit", "cycle"] +
