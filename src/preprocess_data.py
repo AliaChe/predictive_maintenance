@@ -40,8 +40,8 @@ def create_sequences(df, sequence_length, features):
         unit_df = df[df["unit"] == unit]
 
         for i in range(len(unit_df) - sequence_length):
-            seq = unit_df[features].iloc[i:i+sequence_length].values
-            target = unit_df["RUL"].iloc[i+sequence_length]
+            seq = unit_df[features].iloc[i : i + sequence_length].values
+            target = unit_df["RUL"].iloc[i + sequence_length - 1]
 
             X.append(seq)
             y.append(target)
