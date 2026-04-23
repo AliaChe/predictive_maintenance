@@ -12,7 +12,7 @@ columns = (
 
 df.columns = columns
 
-print("df description: \n", df.describe())
+print("raw data description: \n", df.describe())
 
 # drop null sensors
 df.dropna(axis=1, inplace=True)
@@ -43,11 +43,19 @@ for s in sensors:
     plt.ylabel("Sensor mean value")
     plt.title(f"{s} mean evolution for all Units")
     plt.legend()
-plt.show()
 
 # compute remaining useful life (RUL) for each unit
 rul = df.groupby("unit")["cycle"].max().reset_index()
 rul.columns = ["unit", "max_cycle"]
+print("Max cycle per unit: \n", rul)
+
+# plot max cycle per unit
+plt.figure(figsize=(10,6))
+plt.plot(rul.unit, rul.max_cycle)
+plt.xlabel("unit")
+plt.ylabel("Maximum cycle value")
+plt.title("Maximum cycle per unit")
+plt.legend()
 
 df = df.merge(rul, on="unit")
 df["RUL"] = df["max_cycle"] - df["cycle"]
@@ -58,8 +66,9 @@ print("df with RUL info: \n", df.head())
 unit = df[df["unit"] == check_unit]
 
 # plot RUL over time for chosen unit
+plt.figure(figsize=(10,6))
 plt.plot(unit["cycle"], unit["RUL"])
-plt.title("RUL over time - Unit 1")
+plt.title(f"RUL over time - Unit {check_unit}")
 plt.xlabel("Cycle")
 plt.ylabel("RUL")
 plt.show()
