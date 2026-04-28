@@ -12,6 +12,12 @@ def create_sequences(df, sequence_length, features):
 
     return np.array(X), np.array(y)
 
+class TargetScaler:
+    def __init__(self, clip_value):
+        self.clip_value = clip_value
 
-def scale_targets(y, clip_value):
-    return y / clip_value
+    def transform(self, y):
+        return y / self.clip_value
+
+    def inverse_transform(self, y):
+        return y * self.clip_value    

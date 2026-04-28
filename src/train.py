@@ -1,8 +1,10 @@
 from data.prepare_data import load_data, add_rul, split_by_unit, scale_data
-from data.sequences import create_sequences, scale_targets
+from data.sequences import create_sequences, TargetScaler
 from tensorflow.keras import callbacks
 from models.lstm_model import build_model
 from utils.load_config import load_config
+from evaluate import plot_predictions, evaluate_units
+from sklearn.utils import shuffle
 
 config = load_config()
 
@@ -36,9 +38,13 @@ X_train, y_train = create_sequences(train_df, sequence_length, features)
 X_val, y_val     = create_sequences(val_df, sequence_length, features)
 X_test, y_test   = create_sequences(test_df, sequence_length, features)
 
-y_train = scale_targets(y_train, clip_value)
-y_val   = scale_targets(y_val, clip_value)
-y_test  = scale_targets(y_test, clip_value)
+target_scaler = TargetScaler(clip_value)
+
+y_train = target_scaler.transform(y_train)
+y_val   = target_scaler.transform(y_val)
+y_test  = target_scaler.transform(y_test)
+
+X_train, y_train = shuffle(X_train, y_train, random_state=config["split"]["random_state"])
 
 # create model
 model = build_model(sequence_length, len(features), config)
@@ -59,8 +65,11 @@ history = model.fit(
     callbacks=[callback]
 )
 
-# evaluate model using test data
-test_loss, test_mae = model.evaluate(X_test, y_test)
+# evaluate model for all tested units or set max_units to evaluate
+results = evaluate_units(model, test_df, features, config)
 
-print("Test MSE:", test_loss)
-print("Test MAE:", test_mae)
+# plot predictions for a given unit
+plot_predictions(results, unit_id=3)
+
+# plot a given number of units
+plot_predictions(results, n_units=6)
