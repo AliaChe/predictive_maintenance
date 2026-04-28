@@ -33,11 +33,19 @@ def add_rul(df, clip_value=125):
     return df
 
 
-def split_by_unit(df):
+def split_by_unit(df, test_size=0.3, val_size=0.5, random_state=42):
     units = df["unit"].unique()
 
-    train_units, temp_units = train_test_split(units, test_size=0.3, random_state=42)
-    val_units, test_units = train_test_split(temp_units, test_size=0.5, random_state=42)
+    train_units, temp_units = train_test_split(
+        units,
+        test_size=test_size,
+        random_state=random_state
+    )
+    val_units, test_units = train_test_split(
+        temp_units,
+        test_size=val_size,
+        random_state=random_state
+    )
 
     return (
         df[df["unit"].isin(train_units)].copy(),

@@ -11,3 +11,7 @@ def create_sequences(df, sequence_length, features):
             y.append(unit_df["RUL"].iloc[i+sequence_length-1])
 
     return np.array(X), np.array(y)
+
+
+def scale_targets(y, clip_value):
+    return y / clip_value

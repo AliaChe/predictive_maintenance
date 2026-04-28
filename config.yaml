@@ -1,0 +1,27 @@
+data:
+  path: "./data/raw/train_FD001.txt"
+  sequence_length: 30
+  clip_value: 125
+
+features:
+  use_operational_settings: true
+
+split:
+  test_size: 0.3
+  val_size: 0.5
+  random_state: 42
+
+scaling:
+  method: "standard"
+
+model:
+  lstm_units_1: 32
+  lstm_units_2: 16
+  dropout: 0.3
+  dense_units: 16
+
+training:
+  batch_size: 64
+  epochs: 50
+  learning_rate: 0.001
+  patience: 3

@@ -1,20 +1,26 @@
 from tensorflow.keras import layers, models, optimizers
 
 
-def build_model(sequence_length, n_features):
+def build_model(sequence_length, n_features, config):
     model = models.Sequential([
-        layers.LSTM(32, input_shape=(sequence_length, n_features), return_sequences=True),
-        layers.Dropout(0.3),
+        layers.LSTM(
+            config["model"]["lstm_units_1"],
+            input_shape=(sequence_length, n_features),
+            return_sequences=True
+        ),
+        layers.Dropout(config["model"]["dropout"]),
 
-        layers.LSTM(16),
-        layers.Dropout(0.3),
+        layers.LSTM(config["model"]["lstm_units_2"]),
+        layers.Dropout(config["model"]["dropout"]),
 
-        layers.Dense(16, activation="relu"),
+        layers.Dense(config["model"]["dense_units"], activation="relu"),
         layers.Dense(1)
     ])
 
     model.compile(
-        optimizer=optimizers.Adam(0.001),
+        optimizer=optimizers.Adam(
+            config["training"]["learning_rate"]
+        ),
         loss="mse",
         metrics=["mae"]
     )
