@@ -1,5 +1,9 @@
 from tensorflow.keras import layers, models, optimizers
+from tensorflow import square, reduce_mean
 
+def weighted_mse(y_true, y_pred):
+    weight = 1 + 2 * (1 - y_true)
+    return reduce_mean(weight * square(y_true - y_pred))
 
 def build_model(sequence_length, n_features, config):
     model = models.Sequential([
@@ -21,7 +25,7 @@ def build_model(sequence_length, n_features, config):
         optimizer=optimizers.Adam(
             config["training"]["learning_rate"]
         ),
-        loss="mse",
+        loss=weighted_mse,
         metrics=["mae"]
     )
 
