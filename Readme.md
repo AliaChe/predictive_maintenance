@@ -1,6 +1,6 @@
-# 🔧 Predictive Maintenance with LSTM (NASA CMAPSS)
+# Predictive Maintenance for aircraft engines
 
-## 📌 Overview
+## Overview
 This project focuses on **Remaining Useful Life (RUL) prediction** for aircraft engines using the NASA CMAPSS dataset.
 
 Given multivariate time-series sensor data, the goal is to:
@@ -15,7 +15,7 @@ The project implements a full **end-to-end machine learning pipeline**:
 
 ---
 
-## 📊 Dataset
+## Dataset
 
 - Source: NASA CMAPSS (FD001 subset) <[link](https://www.kaggle.com/datasets/fareselgohary003/nasa-cmapss-turbofan-engine-rul-dataset?resource=download)>
 - Multiple engines (units)
@@ -31,7 +31,7 @@ Target:
 
 ---
 
-## ⚙️ Pipeline
+## Pipeline
 
 ### 1. Data preprocessing
 - Column naming and cleaning
@@ -82,7 +82,7 @@ LSTM-based architecture:
 
 ---
 
-## 📈 Results
+## Results
 
 The model:
 - captures degradation trends  
@@ -96,7 +96,7 @@ Example observations:
 
 ---
 
-## 📉 Example Predictions
+## Example Predictions
 
 ![Predicted vs True RUL](images/pred_vs_true.png) 
 
@@ -105,7 +105,7 @@ The model captures the degradation trend but tends to underestimate RUL in early
 
 ---
 
-## 🧠 Key Insights
+## Key Insights
 
 - Early-stage degradation is difficult to detect due to weak signal  
 - Feature engineering significantly improves performance  
@@ -113,7 +113,7 @@ The model captures the degradation trend but tends to underestimate RUL in early
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - Python  
 - Pandas / NumPy  
@@ -123,7 +123,7 @@ The model captures the degradation trend but tends to underestimate RUL in early
 
 ---
 
-## 🚀 How to Run
+## How to Run
 
 ```bash
 pip install -r requirements.txt
