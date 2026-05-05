@@ -1,6 +1,6 @@
 data:
   path: "./data/raw/train_FD001.txt"
-  sequence_length: 30
+  sequence_length: 50
   clip_value: 125
 
 features:
@@ -15,10 +15,10 @@ scaling:
   method: "standard"
 
 model:
-  lstm_units_1: 32
-  lstm_units_2: 16
-  dropout: 0.3
-  dense_units: 16
+  lstm_units_1: 64
+  lstm_units_2: 32
+  dropout: 0.2
+  dense_units: 32
 
 training:
   batch_size: 64
