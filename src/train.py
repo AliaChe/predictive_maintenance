@@ -1,4 +1,11 @@
-from data.prepare_data import load_data, add_rul, split_by_unit, scale_data
+from data.prepare_data import(
+    load_data,
+    add_rul,
+    split_by_unit,
+    scale_data,
+    add_rolling_features,
+    add_diff_features,
+)
 from data.sequences import create_sequences, TargetScaler
 from tensorflow.keras import callbacks
 from models.lstm_model import build_model
@@ -16,7 +23,15 @@ df = add_rul(df, clip_value)
 # set sequence_length
 sequence_length = config["data"]["sequence_length"]
 
-# define features as op_settings and sensors columns
+# define features as sensors columns
+features = [col for col in df.columns if "sensor" in col]
+
+df = add_rolling_features(df, features, window=5)
+df = add_diff_features(df, features)
+
+df.fillna(0, inplace=True)
+
+# add new features (rolling mean and diff on all sensors)
 features = [col for col in df.columns if "sensor" in col]
 
 if config["features"]["use_operational_settings"]:

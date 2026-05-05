@@ -67,4 +67,18 @@ def scale_data(train_df, val_df, test_df, features):
     return train_df, val_df, test_df, scaler
 
 
+def add_rolling_features(df, sensors, window=5):
+    for sensor in sensors:
+        df[f"{sensor}_mean"] = (
+            df.groupby("unit")[sensor]
+            .rolling(window)
+            .mean()
+            .reset_index(level=0, drop=True)
+        )
+    return df
 
+
+def add_diff_features(df, sensors):
+    for sensor in sensors:
+        df[f"{sensor}_diff"] = df.groupby("unit")[sensor].diff()
+    return df
