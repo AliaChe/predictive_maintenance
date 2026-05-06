@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
-from data.sequences import create_sequences, TargetScaler
+import numpy as np
 import math
+from data.sequences import create_sequences, TargetScaler
 
 def plot_predictions(results, unit_id=None, n_units=None, max_cols=3):
 
@@ -83,9 +84,14 @@ def evaluate_units(model, df, features, config, max_units=None):
         y_pred = model.predict(X_unit, verbose=0)
         y_pred = target_scaler.inverse_transform(y_pred).flatten()
 
+        mae_cycles = np.mean(np.abs(y_unit - y_pred))
+        
         results[unit_id] = {
             "y_pred": y_pred,
-            "y_true": y_unit
+            "y_true": y_unit,
+            "mae": mae_cycles
         }
+    
+    print(f"Mean per-unit MAE: {np.mean([r['mae'] for r in results.values()]):.2f}")
 
     return results

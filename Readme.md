@@ -15,6 +15,12 @@ The project implements a full **end-to-end machine learning pipeline**:
 
 ---
 
+## Business Impact
+
+Predict engine failures before they occur, reducing maintenance costs and preventing unexpected downtime.
+
+---
+
 ## Dataset
 
 - Source: NASA CMAPSS (FD001 subset) <[link](https://www.kaggle.com/datasets/fareselgohary003/nasa-cmapss-turbofan-engine-rul-dataset?resource=download)>
@@ -89,19 +95,26 @@ The model:
 - detects failure phase  
 - but tends to overestimate RUL in early life  
 
-Example observations:
-
-- ✔ good tracking near failure  
-- ⚠ less accurate when engines are healthy  
-
 ---
 
-## Example Predictions
+### Predictions
 
 ![Predicted vs True RUL](images/pred_vs_true.png) 
 
 The figure shows predicted vs true RUL for multiple units. \
 The model captures the degradation trend but tends to underestimate RUL in early life. The model struggles to estimate high RUL due to limited degradation signal in early cycles and target clipping.
+
+---
+
+### Performance
+
+Test set results (FD001):
+
+- **Mean MAE (per unit): 11.5 cycles**
+
+This means that, on average, the model predicts the Remaining Useful Life of an engine within approximately 11 cycles.
+
+The model captures degradation trends well, especially near failure, but tends to be less accurate during early life stages due to limited signal.
 
 ---
 
